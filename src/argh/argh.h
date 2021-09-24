@@ -87,7 +87,7 @@ namespace argh
         //
         //   * return (bool) - The value of the flag.
         bool operator[](std::string name);
-        bool operator[](std::initializer_list<std::string> names);
+        bool operator[](std::string names[]);
 
         // Overload the () operator to access the parameters by name.
         //
@@ -96,7 +96,7 @@ namespace argh
         //
         //   * return (std::string) - The value of the parameter.
         std::string operator()(std::string name);
-        std::string operator()(std::initializer_list<std::string> names);
+        std::string operator()(std::string names[]);
 
         // Overload the [] operator to access the positional arguments by index.
         //

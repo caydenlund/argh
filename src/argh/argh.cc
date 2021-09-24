@@ -89,7 +89,7 @@ namespace argh
     {
         return false;
     }
-    bool argh::operator[](std::initializer_list<std::string> names)
+    bool argh::operator[](std::string names[])
     {
         return false;
     }
@@ -104,7 +104,7 @@ namespace argh
     {
         return "";
     }
-    std::string argh::operator()(std::initializer_list<std::string> names)
+    std::string argh::operator()(std::string names[])
     {
         return "";
     }
