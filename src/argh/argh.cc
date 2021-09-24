@@ -72,6 +72,12 @@ namespace argh
     argh::argh(char *argv[])
     {
     }
+    // The argh constructor, as above, but with an array of strings.
+    //
+    //   * std::string argv[] - The command line arguments.
+    argh::argh(std::string argv[])
+    {
+    }
 
     // Overload the [] operator to access the flags by name.
     //
