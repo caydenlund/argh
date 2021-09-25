@@ -89,19 +89,19 @@ That being said,
 
 ## Class members:
 
-## `argh::argh(char* argv[])`
+### `argh::argh(char* argv[])`
 
 The argh constructor.
 
 `char *argv[]` - The command line arguments.
 
-## `void argh::mark_parameter(std::string arg)`
+### `void argh::mark_parameter(std::string arg)`
 
 A method to mark an argument as a parameter, not a flag.
 
 `std::string arg` - The argument to mark as a parameter.
 
-## `bool argh::operator[](std::string name)`
+### `bool argh::operator[](std::string name)`
 
 Overload the [] operator to access a single flag's value by name.
 
@@ -109,7 +109,7 @@ Overload the [] operator to access a single flag's value by name.
 
 `return (bool)` - True when the flag is present, false otherwise.
 
-## `bool argh::operator[](std::string names[])`
+### `bool argh::operator[](std::string names[])`
 
 Overload the [] operator to access the flags by name.
 
@@ -117,7 +117,7 @@ Overload the [] operator to access the flags by name.
 
 `return (bool)` - True when any of the flags is present.
 
-## `std::string argh::operator()(std::string name)`
+### `std::string argh::operator()(std::string name)`
 
 Overload the () operator to access the parameters by name.
 
@@ -125,7 +125,7 @@ Overload the () operator to access the parameters by name.
 
 `return (std::string)` - The value of the parameter, if present; otherwise, an empty string.
 
-## `std::string argh::operator()(std::string names[])`
+### `std::string argh::operator()(std::string names[])`
 
 `std::string names[]` - The list of names of the parameter.
 
@@ -133,7 +133,7 @@ Overload the () operator to access the parameters by name.
 
 Overload the [] operator to access the positional arguments by index.
 
-## `std::string argh::operator[](int index)`
+### `std::string argh::operator[](int index)`
 
 `int index` - The index of the positional argument.
 
