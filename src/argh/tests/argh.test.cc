@@ -38,6 +38,9 @@ TEST(argh_argh_test, argh_argh_constructor_test)
 
     std::string argv_g[] = {"test", "-vo", "output.txt"};
     argh::argh args_g(argv_g);
+
+    std::string argv_h[] = {"test", "--output=output.txt"};
+    argh::argh args_h(argv_h);
 }
 
 // Test the argh::argh class operator[] for flags.
@@ -100,6 +103,11 @@ TEST(argh_argh_test, argh_argh_operator_flag_test)
     ASSERT_TRUE(args_g["-v"]);
     ASSERT_FALSE(args_g["--verbose"]);
     ASSERT_TRUE(args_g["-o"]);
+
+    std::string argv_h[] = {"test", "--output=output.txt"};
+    argh::argh args_h(argv_h);
+    ASSERT_TRUE(args_h["--output"]);
+    ASSERT_FALSE(args_h["--output=output.txt"]);
 }
 
 // Test the argh::argh class operator[] for flags.
@@ -158,6 +166,10 @@ TEST(argh_argh_test, argh_argh_operator_param_test)
     std::string argv_d[] = {"test", "-vo", "output.txt"};
     argh::argh args_d(argv_d);
     ASSERT_STREQ("output.txt", args_d("-o").c_str());
+
+    std::string argv_e[] = {"test", "--output=output.txt"};
+    argh::argh args_e(argv_e);
+    ASSERT_STREQ("output.txt", args_e("--output").c_str());
 }
 
 // Test the argh::argh class operator[] for parameters.
@@ -182,6 +194,10 @@ TEST(argh_argh_test, argh_argh_operator_param_list_test)
     std::string argv_d[] = {"test", "-vo", "output.txt"};
     argh::argh args_d(argv_d);
     ASSERT_STREQ("output.txt", args_d(args_list).c_str());
+
+    std::string argv_e[] = {"test", "--output=output.txt"};
+    argh::argh args_e(argv_e);
+    ASSERT_STREQ("output.txt", args_e(args_list).c_str());
 }
 
 // Test the argh::argh class's method mark_parameter.
@@ -228,6 +244,12 @@ TEST(argh_argh_test, argh_argh_positional_simple_test)
     ASSERT_STREQ("test", args_e[0].c_str());
     ASSERT_STREQ("output.txt", args_e[1].c_str());
     ASSERT_STREQ("input.txt", args_e[2].c_str());
+
+    std::string argv_f[] = {"test", "--output=output.txt", "input.txt"};
+    argh::argh args_f(argv_f);
+    ASSERT_STREQ("test", args_f[0].c_str());
+    ASSERT_STREQ("input.txt", args_f[1].c_str());
+    ASSERT_STREQ("", args_f[2].c_str());
 }
 
 // This test ensures that the argh::argh class can correctly
@@ -272,4 +294,11 @@ TEST(argh_argh_test, argh_argh_positional_complex_test)
     // Now, positional arguments should be "test", "input.txt".
     ASSERT_STREQ("input.txt", args_c[1].c_str());
     ASSERT_STREQ("", args_c[2].c_str());
+
+    std::string argv_d[] = {"test", "--output=output.txt", "input.txt", "--verbose"};
+    argh::argh args_d(argv_d);
+    // Positional arguments should be "test", "input.txt".
+    ASSERT_STREQ("test", args_d[0].c_str());
+    ASSERT_STREQ("input.txt", args_d[1].c_str());
+    ASSERT_STREQ("", args_d[2].c_str());
 }
