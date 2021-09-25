@@ -66,7 +66,7 @@ There are two kinds of options: *flags* and *parameters.*
 
 * **Flag:** Boolean options that are either *present* or *not present.*
 
-* **Parameter:** An option that takes a value.
+* **Parameter:** An option that takes a value. If a parameter contains the character '=', its value is the rest of the string. Otherwise, the value is the next argument in the argv vector.
 
 * **Positional Argument:** An argument that does not start with a `-` or `--`, and that is not the value of a parameter.
 

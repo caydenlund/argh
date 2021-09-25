@@ -33,7 +33,8 @@ namespace argh
     //      There are two kinds of options:
     //        a. Flags. These are boolean arguments that are either present or not present.
     //        b. Parameters. These are arguments that take a value.
-    //           The value is always the next argument in the argv vector.
+    //           If a parameter contains the character '=', its value is the rest of the string.
+    //           Otherwise, the value is the next argument in the argv vector.
     //   2. Positional arguments.
     //      These are arguments that are interpreted by the program.
     //      Positional arguments are often required.
