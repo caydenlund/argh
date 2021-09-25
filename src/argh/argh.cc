@@ -79,6 +79,13 @@ namespace argh
     {
     }
 
+    // A method to mark an argument as a parameter, not a flag.
+    //
+    //   * std::string arg - The argument to mark as a parameter.
+    void mark_parameter(std::string arg)
+    {
+    }
+
     // Overload the [] operator to access the flags by name.
     //
     //   * std::string name - The name of the flag.
@@ -110,6 +117,27 @@ namespace argh
     }
 
     // Overload the [] operator to access the positional arguments by index.
+    //
+    // ==============================================================================================================
+    // |                                                                                                            |
+    // |  It's important to note that the parser does not understand the difference                                 |
+    // |  between a positional argument and the value of a parameter!                                               |
+    // |                                                                                                            |
+    // |  For instance:                                                                                             |
+    // |    "program -o output.txt file.txt"                                                                        |
+    // |       Should "output.txt" be interpreted as a positional argument, or as the value of the "-o" parameter?  |
+    // |    "program -v file.txt"                                                                                   |
+    // |       Should "file.txt" be interpreted as a positional argument, or as the value of the "-v" parameter?    |
+    // |                                                                                                            |
+    // |  For this reason, all arguments that are not flags or parameters                                           |
+    // |  are considered positional arguments by default.                                                           |
+    // |  If you want to change this behavior, you can use one of the following approaches:                         |
+    // |    1. Use the argh::set_parameter(parameter) function to mark the argument                                 |
+    // |       following a given parameter as the parameter's value.                                                |
+    // |    2. Use the argh::operator(parameter) operater to get the value of a parameter                           |
+    // |       before using the argh::operator[] to access the positional arguments.                                |
+    // |                                                                                                            |
+    // ==============================================================================================================
     //
     //   * int index - The index of the positional argument.
     //
