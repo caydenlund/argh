@@ -121,7 +121,7 @@ namespace argh
         // |  If you want to change this behavior, you can use one of the following approaches:                         |
         // |    1. Use the argh::set_parameter(parameter) function to mark the argument                                 |
         // |       following a given parameter as the parameter's value.                                                |
-        // |    2. Use the argh::operator(parameter) operater to get the value of a parameter                           |
+        // |    2. Use the argh::operator(parameter) operater to query the value of a parameter                         |
         // |       before using the argh::operator[] to access the positional arguments.                                |
         // |                                                                                                            |
         // ==============================================================================================================
