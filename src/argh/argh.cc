@@ -82,7 +82,7 @@ namespace argh
     // A method to mark an argument as a parameter, not a flag.
     //
     //   * std::string arg - The argument to mark as a parameter.
-    void mark_parameter(std::string arg)
+    void argh::mark_parameter(std::string arg)
     {
     }
 
