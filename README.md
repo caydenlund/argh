@@ -2,7 +2,7 @@
 
 The last argument parser that you'll ever need!
 
-Argh is a C++ library that provides a simple, powerful, and easy-to-use
+argh is a C++ library that provides a simple, powerful, and easy-to-use
 API for parsing command line arguments.
 
 ## Features:
