@@ -93,7 +93,7 @@ That being said,
 
 The argh constructor.
 
-`char *argv[]` - The command line arguments.
+`char* argv[]` - The command line arguments.
 
 ### `void argh::mark_parameter(std::string arg)`
 
