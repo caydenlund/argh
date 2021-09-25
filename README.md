@@ -77,9 +77,8 @@ The parser cannot understand on its own whether an argument that does not start 
 That is, if the arguments were `prg -v output.txt`, should we interpret `output.txt` as the value of the `-v` option or as its own positional argument?
 
 
-For this reason, all arguments that are not flags or parameters
-are considered positional arguments by default.
-If you want to change this behavior, use one of the following approaches:
+For this reason, all arguments that are not flags or parameters are considered positional arguments by default. If you want to change this behavior, use one of the following approaches:
+
 1. Use the `argh::set_parameter(parameter)` function to mark the argument
 following a given parameter as the parameter's value.
 2. Use the `argh::operator(parameter)` operater to query the value of a parameter
@@ -127,14 +126,28 @@ Overload the () operator to access the parameters by name.
 
 ### `std::string argh::operator()(std::string names[])`
 
-`std::string names[]` - The list of names of the parameter.
+`std::string names[]` - The list of names of parameters.
 
 `return (std::string)` - The value of the first parameter present; if none are present, an empty string.
 
-Overload the [] operator to access the positional arguments by index.
-
 ### `std::string argh::operator[](int index)`
+
+Overload the [] operator to access the positional arguments by index.
 
 `int index` - The index of the positional argument.
 
 `return (std::string)` - The value of the positional argument.
+
+# Build:
+
+The argh library is built using Google's Bazel utility.
+
+    $ cd src && bazel build //argh
+
+And that's it. That is seriously all it takes. The binary will be put in the `bazel-bin` directory.
+
+If you want to run the unit tests, you can do so with:
+    
+    $ cd src && bazel test //argh/tests:argh.test
+
+Bazel will automatically download and build the gtest library for you, run the tests, and save the results in the `bazel-testlogs` directory.
