@@ -1,5 +1,5 @@
 // src/argh/tests/argh.test.cc
-// v0.2.0
+// v0.2.1
 //
 // Author: Cayden Lund
 //   Date: 09/26/2021
@@ -20,9 +20,6 @@ TEST(argh_argh_test, argh_argh_constructor_test)
 {
     std::string argv_a[] = {"test"};
     argh::argh args_a(1, argv_a);
-
-    size_t memLeakCount;
-    uint64_t memLeakSize;
 
     std::string argv_b[] = {"test", "-h"};
     argh::argh args_b(2, argv_b);

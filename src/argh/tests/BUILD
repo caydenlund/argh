@@ -4,7 +4,6 @@ cc_test(
     srcs = ["argh.test.cc"],
     deps = [
         "@googletest//:gtest_main",
-        "//memplumber",
         "//argh"
     ]
 )
