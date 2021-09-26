@@ -27,7 +27,7 @@ API for parsing command line arguments.
 
     int main(int argc, char* argv[])
     {
-        argh::argh args(argv);
+        argh::argh args(argc, argv);
         // And just like that, the arguments are parsed and available in args!
 
         if (args["-v"])
@@ -88,9 +88,11 @@ That being said,
 
 ## Class members:
 
-### `argh::argh(char* argv[])`
+### `argh::argh(int argc, char* argv[])`
 
 The argh constructor.
+
+`int argc` - The count of command line arguments.
 
 `char* argv[]` - The command line arguments.
 
@@ -149,5 +151,9 @@ And that's it. That is seriously all it takes. The binary will be put in the `ba
 If you want to run the unit tests, you can do so with:
     
     $ cd src && bazel test //argh/tests:argh.test
+
+Also, you can run the unit tests with ASAN profiling:
+
+    $ cd src && bazel test --config=asan //argh/tests:argh.test
 
 Bazel will automatically download and build the gtest library for you, run the tests, and save the results in the `bazel-testlogs` directory.

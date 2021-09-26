@@ -1,5 +1,5 @@
 // src/argh/argh.cc
-// v0.1.0
+// v0.2.0
 //
 // Author: Cayden Lund
 //   Date: 09/24/2021
@@ -12,6 +12,8 @@
 
 #include "argh.h"
 
+#include <iostream>
+#include <iterator>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -69,15 +71,40 @@ namespace argh
     //
     // The argh constructor.
     //
+    //   * int argc     - The count of command line arguments.
     //   * char *argv[] - The command line arguments.
-    argh::argh(char *argv[])
+    argh::argh(int argc, char *argv[])
     {
+        initialize();
+
+        for (int i = 1; i < argc; i++)
+        {
+            args.push_back(argv[i]);
+        }
     }
     // The argh constructor, as above, but with an array of strings.
     //
+    //   * int argc           - The count of command line arguments.
     //   * std::string argv[] - The command line arguments.
-    argh::argh(std::string argv[])
+    argh::argh(int argc, std::string argv[])
     {
+        initialize();
+
+        std::cout << "Args (" << argc << "):" << std::endl;
+        for (int i = 0; i < argc; i++)
+        {
+            this->args.push_back(argv[i]);
+            std::cout << i << ". " << argv[i] << std::endl;
+        }
+        // std::cout << std::endl;
+    }
+
+    // A zero-argument method for initializing the instance variables.
+    void argh::initialize()
+    {
+        this->args = std::vector<std::string>();
+        this->flags = std::unordered_set<std::string>();
+        this->parameters = std::unordered_map<std::string, std::string>();
     }
 
     // A method to mark an argument as a parameter, not a flag.

@@ -1,5 +1,5 @@
 // src/argh/argh.h
-// v0.1.0
+// v0.2.0
 //
 // Author: Cayden Lund
 //   Date: 09/24/2021
@@ -15,6 +15,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 #include <vector>
 
 // The argh namespace contains all of the argh functionality
@@ -44,7 +45,7 @@ namespace argh
     //
     // Pass the argv vector to the constructor.
     //
-    //    argh::argh args(argv);
+    //    argh::argh args(argc, argv);
     //
     // Access flags using the operator[] with a string or a list of strings.
     //
@@ -73,13 +74,15 @@ namespace argh
     public:
         // The argh constructor.
         //
+        //   * int argc     - The count of command line arguments.
         //   * char *argv[] - The command line arguments.
-        argh(char *argv[]);
+        argh(int argc, char *argv[]);
 
         // The argh constructor, overloaded to accept an array of strings.
         //
+        //   * int argc           - The count of command line arguments.
         //   * std::string argv[] - The command line arguments.
-        argh(std::string argv[]);
+        argh(int argc, std::string argv[]);
 
         // A method to mark an argument as a parameter, not a flag.
         //
@@ -133,14 +136,25 @@ namespace argh
         std::string operator[](int index);
 
     private:
+        // A zero-argument method for initializing the instance variables.
+        void initialize();
+
+        // A method to parse a single argument.
+        //
+        //   * std::string arg - The argument to parse.
+        void parse_argument(std::string arg);
+
+        // The original argv vector.
+        std::vector<std::string> args;
+
         // The set of flags.
         std::unordered_set<std::string> flags;
 
         // The set of parameters.
-        std::unordered_set<std::string> parameters;
+        std::unordered_map<std::string, std::string> parameters;
 
         // The positional arguments.
-        std::vector<std::string> positional_arguments;
+        std::unordered_set<int> positional_arguments;
     };
 }
 
