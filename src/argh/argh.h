@@ -47,23 +47,17 @@ namespace argh
     //
     //    argh::argh args(argc, argv);
     //
-    // Access flags using the operator[] with a string or a list of strings.
+    // Access flags using the operator[] with a string.
     //
-    //    if (args["h"] || args["help"])
+    //    if (args["-h"] || args["--help"])
     //    {
     //        std::cout << "Help message." << std::endl;
     //        return 0;
     //    }
     //
-    //    if (args[{"v", "verbose"}])
-    //    {
-    //        std::cout << "Verbose mode." << std::endl;
-    //        return 0;
-    //    }
+    // Access parameters using the operator() with a string.
     //
-    // Access parameters using the operator() with a string or a list of strings.
-    //
-    //    std::string output_file = args({"o", "output"});
+    //    std::string output_file = args("--output");
     //
     // Access positional arguments using the operator[] with an integer.
     //
@@ -84,28 +78,24 @@ namespace argh
         //   * std::string argv[] - The command line arguments.
         argh(int argc, std::string argv[]);
 
-        // A method to mark an argument as a parameter, not a flag.
+        // A method to mark an argument as a parameter, not a positional argument.
         //
         //   * std::string arg - The argument to mark as a parameter.
         void mark_parameter(std::string arg);
 
-        // Overload the [] operator to access the flags by name.
+        // Overload the [] operator to access a flag by name.
         //
         //   * std::string name - The name of the flag.
-        //   * std::initializer_list<std::string> names - The list of names of the flag.
         //
         //   * return (bool) - The value of the flag.
         bool operator[](std::string name);
-        bool operator[](std::string names[]);
 
-        // Overload the () operator to access the parameters by name.
+        // Overload the () operator to access a parameter by name.
         //
         //   * std::string name - The name of the parameter.
-        //   * std::initializer_list<std::string> names - The list of names of the parameter.
         //
         //   * return (std::string) - The value of the parameter.
         std::string operator()(std::string name);
-        std::string operator()(std::string names[]);
 
         // Overload the [] operator to access the positional arguments by index.
         //
@@ -144,6 +134,13 @@ namespace argh
         //   * std::string arg - The argument to parse.
         void parse_argument(std::string arg);
 
+        // A helper method to determine whether an argument is a flag.
+        //
+        //   * std::string arg - The argument to check.
+        //
+        //   * return (bool) - True if the argument is a flag, false otherwise.
+        static bool is_flag(std::string arg);
+
         // The original argv vector.
         std::vector<std::string> args;
 
@@ -154,7 +151,9 @@ namespace argh
         std::unordered_map<std::string, std::string> parameters;
 
         // The positional arguments.
-        std::unordered_set<int> positional_arguments;
+        std::vector<std::string> positional_arguments;
+
+        bool double_dash_set;
     };
 }
 

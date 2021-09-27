@@ -110,42 +110,6 @@ TEST(argh_argh_test, argh_argh_operator_flag_test)
     ASSERT_FALSE(args_h["--output=output.txt"]);
 }
 
-// Test the argh::argh class operator[] for flags.
-// This test ensures that the argh::argh class can correctly
-// report whether or not any one in a list of flags is present in argv.
-TEST(argh_argh_test, argh_argh_operator_flags_test)
-{
-    std::string args_list[] = {"-h", "--help"};
-
-    std::string argv_a[] = {"test"};
-    argh::argh args_a(1, argv_a);
-    ASSERT_FALSE(args_a[args_list]);
-
-    std::string argv_b[] = {"test", "-h"};
-    argh::argh args_b(2, argv_b);
-    ASSERT_TRUE(args_b[args_list]);
-
-    std::string argv_c[] = {"test", "--help"};
-    argh::argh args_c(2, argv_c);
-    ASSERT_TRUE(args_c[args_list]);
-
-    std::string argv_d[] = {"test", "-hv"};
-    argh::argh args_d(2, argv_d);
-    ASSERT_TRUE(args_d[args_list]);
-
-    std::string argv_e[] = {"test", "--help", "-v"};
-    argh::argh args_e(3, argv_e);
-    ASSERT_TRUE(args_e[args_list]);
-
-    std::string argv_f[] = {"test", "-hv", "-o", "output.txt"};
-    argh::argh args_f(4, argv_f);
-    ASSERT_TRUE(args_f[args_list]);
-
-    std::string argv_g[] = {"test", "-vo", "output.txt"};
-    argh::argh args_g(3, argv_g);
-    ASSERT_FALSE(args_g[args_list]);
-}
-
 // Test the argh::argh class operator[] for parameters.
 // This test ensures that the argh::argh class can correctly
 // report the value of a given parameter in argv.
@@ -170,34 +134,6 @@ TEST(argh_argh_test, argh_argh_operator_param_test)
     std::string argv_e[] = {"test", "--output=output.txt"};
     argh::argh args_e(2, argv_e);
     ASSERT_STREQ("output.txt", args_e("--output").c_str());
-}
-
-// Test the argh::argh class operator[] for parameters.
-// This test ensures that the argh::argh class can correctly
-// report the value of one of the given parameters in argv.
-TEST(argh_argh_test, argh_argh_operator_param_list_test)
-{
-    std::string args_list[] = {"-o", "--output"};
-
-    std::string argv_a[] = {"test"};
-    argh::argh args_a(1, argv_a);
-    ASSERT_STREQ("", args_a(args_list).c_str());
-
-    std::string argv_b[] = {"test", "-o", "output.txt"};
-    argh::argh args_b(3, argv_b);
-    ASSERT_STREQ("output.txt", args_b(args_list).c_str());
-
-    std::string argv_c[] = {"test", "--output", "output.txt", "-v"};
-    argh::argh args_c(4, argv_c);
-    ASSERT_STREQ("output.txt", args_c(args_list).c_str());
-
-    std::string argv_d[] = {"test", "-vo", "output.txt"};
-    argh::argh args_d(3, argv_d);
-    ASSERT_STREQ("output.txt", args_d(args_list).c_str());
-
-    std::string argv_e[] = {"test", "--output=output.txt"};
-    argh::argh args_e(2, argv_e);
-    ASSERT_STREQ("output.txt", args_e(args_list).c_str());
 }
 
 // Test the argh::argh class's method mark_parameter.

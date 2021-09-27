@@ -47,23 +47,17 @@ namespace argh
     //
     //    argh::argh args(argv);
     //
-    // Access flags using the operator[] with a string or a list of strings.
+    // Access flags using the operator[] with a string.
     //
-    //    if (args["h"] || args["help"])
+    //    if (args["-h"] || args["--help"])
     //    {
     //        std::cout << "Help message." << std::endl;
     //        return 0;
     //    }
     //
-    //    if (args[{"v", "verbose"}])
-    //    {
-    //        std::cout << "Verbose mode." << std::endl;
-    //        return 0;
-    //    }
+    // Access parameters using the operator() with a string.
     //
-    // Access parameters using the operator() with a string or a list of strings.
-    //
-    //    std::string output_file = args({"o", "output"});
+    //    std::string output_file = args("--output");
     //
     // Access positional arguments using the operator[] with an integer.
     //
@@ -79,7 +73,7 @@ namespace argh
 
         for (int i = 1; i < argc; i++)
         {
-            args.push_back(argv[i]);
+            parse_argument(argv[i]);
         }
     }
     // The argh constructor, as above, but with an array of strings.
@@ -90,13 +84,10 @@ namespace argh
     {
         initialize();
 
-        std::cout << "Args (" << argc << "):" << std::endl;
         for (int i = 0; i < argc; i++)
         {
-            this->args.push_back(argv[i]);
-            std::cout << i << ". " << argv[i] << std::endl;
+            parse_argument(argv[i]);
         }
-        // std::cout << std::endl;
     }
 
     // A zero-argument method for initializing the instance variables.
@@ -105,42 +96,130 @@ namespace argh
         this->args = std::vector<std::string>();
         this->flags = std::unordered_set<std::string>();
         this->parameters = std::unordered_map<std::string, std::string>();
+        this->positional_arguments = std::vector<std::string>();
+
+        this->double_dash_set = false;
     }
 
-    // A method to mark an argument as a parameter, not a flag.
+    // A private method for parsing a single argument.
+    //
+    //   * std::string arg - The argument to parse.
+    void argh::parse_argument(std::string arg)
+    {
+        // Make sure the argument is not empty.
+        if (arg.length() == 0)
+            return;
+
+        // If we've seen a double dash, we're parsing positional arguments.
+        if (double_dash_set)
+        {
+            this->args.push_back(arg);
+            this->positional_arguments.push_back(arg);
+            return;
+        }
+
+        // Is the argument a single dash?
+        if (arg == "-")
+        {
+            // A single dash is a positional argument.
+            this->args.push_back(arg);
+            this->positional_arguments.push_back(arg);
+            return;
+        }
+
+        // Is the argument a double dash?
+        if (arg == "--")
+        {
+            // A double dash means that all following arguments are positional arguments.
+            this->args.push_back(arg);
+            this->double_dash_set = true;
+            return;
+        }
+
+        // Is the argument a flag?
+        if (is_flag(arg))
+        {
+            // Does the argument contain '='?
+            if (arg.find('=') != std::string::npos)
+            {
+                // If so, it's a parameter.
+                std::string key = arg.substr(0, arg.find('='));
+                std::string value = arg.substr(arg.find('=') + 1);
+                this->parameters[key] = value;
+                this->flags.insert(key);
+                this->args.push_back(arg);
+                return;
+            }
+            // Does the flag start with a double dash?
+            if (arg.length() >=2 && arg.substr(0, 2) == "--")
+            {
+                this->flags.insert(arg);
+                this->args.push_back(arg);
+                return;
+            }
+            else
+            {
+                // Treat each character following the single dash as a flag.
+                for (long unsigned int i = 1; i < arg.length(); i++)
+                {
+                    this->flags.insert("-" + arg.substr(i, 1));
+                }
+                this->args.push_back(arg);
+                return;
+            }
+        }
+
+        // If we've made it this far, the argument is either the value of a parameter
+        // or a positional argument.
+        // Since we can't tell the difference, we treat it as both.
+
+        // Was the last argument a flag?
+        if (this->args.size() > 0 && is_flag(this->args.back()))
+        {
+            // If so, we treat the argument as the value of a parameter.
+            this->parameters[this->args.back()] = arg;
+        }
+        this->positional_arguments.push_back(arg);
+        this->args.push_back(arg);
+    }
+
+    // A method to determine whether an argument is a flag.
+    //
+    //   * std::string arg - The argument to check.
+    //
+    //   * return (bool) - True if the argument is a flag, false otherwise.
+    bool argh::is_flag(std::string arg)
+    {
+        if (arg.length() < 2) return false;
+        if (arg == "--") return false;
+        return arg[0] == '-';
+    }
+
+    // A method to mark an argument as a parameter, not a positional argument.
     //
     //   * std::string arg - The argument to mark as a parameter.
     void argh::mark_parameter(std::string arg)
     {
     }
 
-    // Overload the [] operator to access the flags by name.
+    // Overload the [] operator to access a flag by name.
     //
     //   * std::string name - The name of the flag.
-    //   * std::initializer_list<std::string> names - The list of names of the flag.
     //
     //   * return (bool) - The value of the flag.
     bool argh::operator[](std::string name)
     {
-        return false;
-    }
-    bool argh::operator[](std::string names[])
-    {
-        return false;
+        return this->flags.count(name);
     }
 
-    // Overload the () operator to access the parameters by name.
+    // Overload the () operator to access a parameter by name.
     //
     //   * std::string name - The name of the parameter.
-    //   * std::initializer_list<std::string> names - The list of names of the parameter.
     //
     //   * return (std::string) - The value of the parameter.
     std::string argh::operator()(std::string name)
     {
-        return "";
-    }
-    std::string argh::operator()(std::string names[])
-    {
+        if (this->parameters.count(name)) return this->parameters[name];
         return "";
     }
 
@@ -172,6 +251,7 @@ namespace argh
     //   * return (std::string) - The value of the positional argument.
     std::string argh::operator[](int index)
     {
+        if ((long unsigned int)index < this->positional_arguments.size()) return this->positional_arguments[index];
         return "";
     }
 }
