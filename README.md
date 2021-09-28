@@ -10,7 +10,7 @@ API for parsing command line arguments.
 * **Lightning-quick.** No complicated input validation. No internal type conversions. No regular expressions. Enjoy the performance benefits of plain old C++!
 * **Easy to use.** No manual parsing. No special cases or special handling of flags. argh works for you to take the busywork out of writing your command-line utility.
 * **Versatile.** It *just works* in every situation.
-* **Support for grouped flags.** `program do_a_thing -a -b -c` is the same as `prg do_a_thing -abc` (which is the same as `prg -abc do_a_thing`).
+* **Support for grouped flags.** `prg do_a_thing -a -b -c` is the same as `prg do_a_thing -abc` (which is the same as `prg -abc do_a_thing`).
 * **Support for options.** Know that the user specified an output file with `prg -o output.txt do_a_thing`.
 * **Support for ordered arguments.**
 * **Unit tests** with the popular gtest library.
