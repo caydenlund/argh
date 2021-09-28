@@ -36,15 +36,15 @@ API for parsing command line arguments.
             return 0;
         }
 
-        if (args[{"-h", "--help"}])
+        if (args["-h"] || args["--help"])
         {
             std::cout << Usage: ... << std::endl;
             return 0;
         }
 
-        if (args[{"-o", "--output"}])
+        if (args["-o"])
         {
-            std::cout << "Output file: " << args({"-o", "--output"}) << std::endl;
+            std::cout << "Output file: " << args("-o") << std::endl;
         }
 
         std::cout << "Program name: " << args[0] << std::endl;
@@ -110,14 +110,6 @@ Overload the [] operator to access a single flag's value by name.
 
 `return (bool)` - True when the flag is present, false otherwise.
 
-### `bool argh::operator[](std::string names[])`
-
-Overload the [] operator to access the flags by name.
-
-`std::string names[]` - The list of names of the flag.
-
-`return (bool)` - True when any of the flags is present.
-
 ### `std::string argh::operator()(std::string name)`
 
 Overload the () operator to access the parameters by name.
@@ -125,12 +117,6 @@ Overload the () operator to access the parameters by name.
 `std::string name` - The name of the parameter.
 
 `return (std::string)` - The value of the parameter, if present; otherwise, an empty string.
-
-### `std::string argh::operator()(std::string names[])`
-
-`std::string names[]` - The list of names of parameters.
-
-`return (std::string)` - The value of the first parameter present; if none are present, an empty string.
 
 ### `std::string argh::operator[](int index)`
 
