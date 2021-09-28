@@ -1,8 +1,8 @@
 // src/argh/argh.cc
-// v0.2.0
+// v0.3.0
 //
 // Author: Cayden Lund
-//   Date: 09/26/2021
+//   Date: 09/28/2021
 //
 // This file contains the argh implementation.
 // Use this utility to parse command line arguments.
@@ -100,6 +100,7 @@ namespace argh
         this->positional_arguments = std::vector<positional_arg>();
 
         this->double_dash_set = false;
+        this->last_flag = "";
     }
 
     // A private method for parsing a single argument.
@@ -115,7 +116,8 @@ namespace argh
         if (double_dash_set)
         {
             this->args.push_back(arg);
-            this->positional_arguments.push_back(arg);
+            positional_arg arg_obj(arg);
+            this->positional_arguments.push_back(arg_obj);
             return;
         }
 
@@ -123,8 +125,8 @@ namespace argh
         if (arg == "-")
         {
             // A single dash is a positional argument.
-            this->args.push_back(arg);
-            this->positional_arguments.push_back(arg);
+            parse_positional_argument(arg);
+            this->last_flag = "";
             return;
         }
 
@@ -134,53 +136,80 @@ namespace argh
             // A double dash means that all following arguments are positional arguments.
             this->args.push_back(arg);
             this->double_dash_set = true;
+            this->last_flag = "";
             return;
         }
 
         // Is the argument a flag?
         if (is_flag(arg))
         {
-            // Does the argument contain '='?
-            if (arg.find('=') != std::string::npos)
-            {
-                // If so, it's a parameter.
-                std::string key = arg.substr(0, arg.find('='));
-                std::string value = arg.substr(arg.find('=') + 1);
-                this->parameters[key] = value;
-                this->flags.insert(key);
-                this->args.push_back(arg);
-                return;
-            }
-            // Does the flag start with a double dash?
-            if (arg.length() >= 2 && arg.substr(0, 2) == "--")
-            {
-                this->flags.insert(arg);
-                this->args.push_back(arg);
-                return;
-            }
-            else
-            {
-                // Treat each character following the single dash as a flag.
-                for (long unsigned int i = 1; i < arg.length(); i++)
-                {
-                    this->flags.insert("-" + arg.substr(i, 1));
-                }
-                this->args.push_back(arg);
-                return;
-            }
+            parse_flag(arg);
+            return;
         }
 
         // If we've made it this far, the argument is either the value of a parameter
         // or a positional argument.
-        // Since we can't tell the difference, we treat it as both.
+        parse_positional_argument(arg);
+    }
 
-        // Was the last argument a flag?
-        if (this->args.size() > 0 && is_flag(this->args.back()))
+    // A helper method for parsing a single flag.
+    //
+    //  * std::string arg - The argument to parse.
+    void argh::parse_flag(std::string arg)
+    {
+        // Does the argument contain '='?
+        if (arg.find('=') != std::string::npos)
         {
-            // If so, we treat the argument as the value of a parameter.
-            this->parameters[this->args.back()] = arg;
+            // If so, it's a parameter.
+            std::string key = arg.substr(0, arg.find('='));
+            std::string value = arg.substr(arg.find('=') + 1);
+
+            this->parameters[key] = value;
+            this->flags.insert(key);
+            this->args.push_back(arg);
+            this->last_flag = "";
+            return;
         }
-        this->positional_arguments.push_back(arg);
+        // Does the flag start with a double dash?
+        if (arg.length() >= 2 && arg.substr(0, 2) == "--")
+        {
+            this->flags.insert(arg);
+            this->args.push_back(arg);
+            this->last_flag = arg;
+            return;
+        }
+        else
+        {
+            // Treat each character following the single dash as a flag.
+            for (long unsigned int i = 1; i < arg.length(); i++)
+            {
+                std::string flag = "-" + arg.substr(i, 1);
+                this->flags.insert(flag);
+                this->last_flag = flag;
+            }
+            this->args.push_back(arg);
+            return;
+        }
+    }
+
+    // A helper method for parsing a single positional argument.
+    //
+    //  * std::string arg - The argument to parse.
+    void argh::parse_positional_argument(std::string arg)
+    {
+        if (this->last_flag.length() > 0)
+        {
+            this->parameters[this->last_flag] = arg;
+            positional_arg arg_obj(this->last_flag, arg);
+            this->positional_arguments.push_back(arg_obj);
+        }
+        else
+        {
+            positional_arg arg_obj(arg);
+            this->positional_arguments.push_back(arg_obj);
+        }
+
+        this->last_flag = "";
         this->args.push_back(arg);
     }
 
@@ -199,10 +228,21 @@ namespace argh
     }
 
     // A method to mark an argument as a parameter, not a positional argument.
+    // Note: This method runs in O(N) time, where N is the number of arguments,
+    // provided that there is only one of the given parameter.
     //
     //   * std::string arg - The argument to mark as a parameter.
     void argh::mark_parameter(std::string arg)
     {
+        for (int i = 0; i < this->positional_arguments.size(); i++)
+        {
+            if (this->positional_arguments[i].get_owner() == arg)
+            {
+                this->positional_arguments.erase(this->positional_arguments.begin() + i);
+                mark_parameter(arg);
+                return;
+            }
+        }
     }
 
     // Overload the [] operator to access a flag by name.
@@ -222,6 +262,7 @@ namespace argh
     //   * return (std::string) - The value of the parameter.
     std::string argh::operator()(std::string name)
     {
+        mark_parameter(name);
         if (this->parameters.count(name))
             return this->parameters[name];
         return "";

@@ -1,8 +1,8 @@
 // src/argh/argh.h
-// v0.2.0
+// v0.3.0
 //
 // Author: Cayden Lund
-//   Date: 09/26/2021
+//   Date: 09/28/2021
 //
 // This file contains the argh headers.
 // Use this utility to parse command line arguments.
@@ -131,10 +131,20 @@ namespace argh
         // A zero-argument method for initializing the instance variables.
         void initialize();
 
-        // A method to parse a single argument.
+        // A helper method to parse a single argument.
         //
         //   * std::string arg - The argument to parse.
         void parse_argument(std::string arg);
+
+        // A helper method to parse a single flag.
+        //
+        //   * std::string arg - The argument to parse.
+        void parse_flag(std::string arg);
+
+        // A helper method to parse a single positional argument.
+        //
+        //   * std::string arg - The argument to parse.
+        void parse_positional_argument(std::string arg);
 
         // A helper method to determine whether an argument is a flag.
         //
@@ -155,7 +165,11 @@ namespace argh
         // The positional arguments.
         std::vector<positional_arg> positional_arguments;
 
+        // Whether we've seen "--" in the arguments.
         bool double_dash_set;
+
+        // If the last argument was a flag, this is the flag's name.
+        std::string last_flag;
     };
 }
 
