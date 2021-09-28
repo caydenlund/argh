@@ -13,6 +13,8 @@
 #ifndef ARGH_H
 #define ARGH_H
 
+#include "positional_arg.h"
+
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
@@ -151,7 +153,7 @@ namespace argh
         std::unordered_map<std::string, std::string> parameters;
 
         // The positional arguments.
-        std::vector<std::string> positional_arguments;
+        std::vector<positional_arg> positional_arguments;
 
         bool double_dash_set;
     };

@@ -11,6 +11,7 @@
 // License: MIT (opensource.org/licenses/MIT)
 
 #include "argh.h"
+#include "positional_arg.h"
 
 #include <iostream>
 #include <iterator>
@@ -96,7 +97,7 @@ namespace argh
         this->args = std::vector<std::string>();
         this->flags = std::unordered_set<std::string>();
         this->parameters = std::unordered_map<std::string, std::string>();
-        this->positional_arguments = std::vector<std::string>();
+        this->positional_arguments = std::vector<positional_arg>();
 
         this->double_dash_set = false;
     }
@@ -151,7 +152,7 @@ namespace argh
                 return;
             }
             // Does the flag start with a double dash?
-            if (arg.length() >=2 && arg.substr(0, 2) == "--")
+            if (arg.length() >= 2 && arg.substr(0, 2) == "--")
             {
                 this->flags.insert(arg);
                 this->args.push_back(arg);
@@ -190,8 +191,10 @@ namespace argh
     //   * return (bool) - True if the argument is a flag, false otherwise.
     bool argh::is_flag(std::string arg)
     {
-        if (arg.length() < 2) return false;
-        if (arg == "--") return false;
+        if (arg.length() < 2)
+            return false;
+        if (arg == "--")
+            return false;
         return arg[0] == '-';
     }
 
@@ -219,7 +222,8 @@ namespace argh
     //   * return (std::string) - The value of the parameter.
     std::string argh::operator()(std::string name)
     {
-        if (this->parameters.count(name)) return this->parameters[name];
+        if (this->parameters.count(name))
+            return this->parameters[name];
         return "";
     }
 
@@ -251,7 +255,8 @@ namespace argh
     //   * return (std::string) - The value of the positional argument.
     std::string argh::operator[](int index)
     {
-        if ((long unsigned int)index < this->positional_arguments.size()) return this->positional_arguments[index];
+        if ((long unsigned int)index < this->positional_arguments.size())
+            return this->positional_arguments[index].get_value();
         return "";
     }
 }
