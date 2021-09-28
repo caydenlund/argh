@@ -14,7 +14,8 @@ API for parsing command line arguments.
 * **Support for options.** Know that the user specified an output file with `prg -o output.txt do_a_thing`.
 * **Support for ordered arguments.**
 * **Unit tests** with the popular gtest library.
-* **Indepdendent.** The only dependency outside of the standard library is the gtest library, which is only used for unit tests and is automatically downloaded and compiled as necessary with Bazel.
+* **Platform-agnostic.**
+* **Independent.** The only dependency outside of the standard library is the gtest library, which is only used for unit tests and is automatically downloaded and compiled as necessary with Bazel.
 * All that, and even **a bag of chips!**
 
 *Note: actual chips not included.
