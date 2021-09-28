@@ -1,5 +1,5 @@
 // src/argh/argh.cc
-// v0.3.0
+// v0.3.1
 //
 // Author: Cayden Lund
 //   Date: 09/28/2021
@@ -234,7 +234,7 @@ namespace argh
     //   * std::string arg - The argument to mark as a parameter.
     void argh::mark_parameter(std::string arg)
     {
-        for (int i = 0; i < this->positional_arguments.size(); i++)
+        for (long unsigned int i = 0; i < this->positional_arguments.size(); i++)
         {
             if (this->positional_arguments[i].get_owner() == arg)
             {
