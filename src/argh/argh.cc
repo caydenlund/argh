@@ -1,5 +1,5 @@
 // src/argh/argh.cc
-// v0.3.1
+// v0.3.2
 //
 // Author: Cayden Lund
 //   Date: 09/28/2021
@@ -299,5 +299,13 @@ namespace argh
         if ((long unsigned int)index < this->positional_arguments.size())
             return this->positional_arguments[index].get_value();
         return "";
+    }
+
+    // Returns the number of positional arguments.
+    //
+    //   * return (int) - The number of positional arguments.
+    int argh::size()
+    {
+        return this->positional_arguments.size();
     }
 }

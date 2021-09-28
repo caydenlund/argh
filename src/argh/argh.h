@@ -1,5 +1,5 @@
 // src/argh/argh.h
-// v0.3.0
+// v0.3.1
 //
 // Author: Cayden Lund
 //   Date: 09/28/2021
@@ -126,6 +126,11 @@ namespace argh
         //
         //   * return (std::string) - The value of the positional argument.
         std::string operator[](int index);
+
+        // Returns the number of positional arguments.
+        //
+        //   * return (int) - The number of positional arguments.
+        int size();
 
     private:
         // A zero-argument method for initializing the instance variables.

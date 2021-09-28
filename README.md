@@ -126,6 +126,12 @@ Overload the [] operator to access the positional arguments by index.
 
 `return (std::string)` - The value of the positional argument.
 
+### `int size()`
+
+Returns the number of positional arguments.
+
+`return (int)` - The number of positional arguments.
+
 # Build:
 
 The argh library is built using Google's Bazel utility.
