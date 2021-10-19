@@ -8,7 +8,7 @@
 // For use in the argh library.
 //
 // Copyright (C) 2021 Cayden Lund <https://github.com/shrimpster00>
-// License: MIT (opensource.org/licenses/MIT)
+// License: MIT <opensource.org/licenses/MIT>
 
 #ifndef POSITIONAL_ARG_H
 #define POSITIONAL_ARG_H

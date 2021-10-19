@@ -8,7 +8,7 @@
 // Use this utility to parse command line arguments.
 //
 // Copyright (C) 2021 Cayden Lund <https://github.com/shrimpster00>
-// License: MIT (opensource.org/licenses/MIT)
+// License: MIT <opensource.org/licenses/MIT>
 
 #ifndef ARGH_H
 #define ARGH_H

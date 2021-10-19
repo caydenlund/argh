@@ -7,7 +7,7 @@
 // This file contains the unit tests for the argh library.
 //
 // Copyright (C) 2021 Cayden Lund <https://github.com/shrimpster00>
-// License: MIT (opensource.org/licenses/MIT)
+// License: MIT <opensource.org/licenses/MIT>
 
 #include <gtest/gtest.h>
 
